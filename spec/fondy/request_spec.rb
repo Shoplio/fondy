@@ -26,7 +26,7 @@ describe Fondy::Request do
   def send_request
     described_class.call(:post, '/api/test',
       param1: 'value1',
-      param2: 'value2',
+      param2: 'value2'
     )
   end
 

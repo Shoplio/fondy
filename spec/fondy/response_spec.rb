@@ -9,8 +9,8 @@ describe Fondy::Response do
           response_status: 'success',
           actual_amount: 100,
           order_status: 'approved',
-        }
-      }.to_json
+        },
+      }.to_json,
     )
   end
 
@@ -22,8 +22,8 @@ describe Fondy::Response do
           response_status: 'failure',
           error_message: 'Order not found',
           error_code: 1018,
-        }
-      }.to_json
+        },
+      }.to_json,
     )
   end
 

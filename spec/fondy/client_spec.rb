@@ -4,10 +4,16 @@ describe Fondy::Client do
   let(:merchant_id) { 1 }
   let(:password) { 'qwerty' }
 
+  let(:signature) { double }
   let(:http_response) { double }
   let(:response) { double }
 
   let(:client) { described_class.new(merchant_id: merchant_id, password: password) }
+
+  def stub_signature_with(*args)
+    expect(Fondy::Signature).to receive(:build)
+      .with(*args)
+  end
 
   def stub_api_request_with(*args)
     expect(Fondy::Request).to receive(:call)
@@ -22,11 +28,13 @@ describe Fondy::Client do
     let(:order_id) { 2 }
 
     before do
-      request_params = {
+      params = {
         merchant_id: merchant_id,
         order_id: order_id,
       }
-      stub_api_request_with(:post, "/api/status/#{order_id}", request_params)
+      stub_signature_with(params: params, password: password)
+        .and_return(signature)
+      stub_api_request_with(:post, "/api/status/#{order_id}", params.merge(signature: signature))
         .and_return(http_response)
       stub_response_with(http_response)
         .and_return(response)

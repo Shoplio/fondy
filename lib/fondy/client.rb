@@ -17,8 +17,9 @@ module Fondy
 
     private
 
-    def send_request(*args)
-      http_response = Request.call(*args)
+    def send_request(method, url, params)
+      params[:signature] = Signature.build(params: params, password: password)
+      http_response = Request.call(method, url, params)
       Response.new(http_response)
     end
   end
