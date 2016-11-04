@@ -1,0 +1,12 @@
+AllCops:
+  TargetRubyVersion: 2.2
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  Exclude:
+    - 'fondy.gemspec'
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 100
