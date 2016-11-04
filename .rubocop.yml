@@ -10,3 +10,18 @@ Style/Documentation:
 
 Metrics/LineLength:
   Max: 100
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Style/MultilineMethodCallBraceLayout:
+  EnforcedStyle: new_line
+
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
