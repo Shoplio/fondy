@@ -4,6 +4,22 @@ module Fondy
       @http_response = http_response
     end
 
+    def success?
+      response['response_status'] == 'success'
+    end
+
+    def error?
+      !success?
+    end
+
+    def error_code
+      response['error_code']
+    end
+
+    def error_message
+      response['error_message']
+    end
+
     def method_missing(method, *_args)
       response[method.to_s] || super
     end
