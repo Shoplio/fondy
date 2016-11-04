@@ -20,7 +20,7 @@ module Fondy
     def send_request(method, url, params)
       params[:signature] = Signature.build(params: params, password: password)
       http_response = Request.call(method, url, params)
-      Response.new(http_response)
+      Response.new(http_response: http_response, password: password)
     end
   end
 end

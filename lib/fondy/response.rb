@@ -1,7 +1,11 @@
 module Fondy
   class Response
-    def initialize(http_response)
+    class InvalidSignature < Fondy::Error
+    end
+
+    def initialize(http_response:, password:)
       @http_response = http_response
+      check_signature(password) if success?
     end
 
     def success?
@@ -29,6 +33,18 @@ module Fondy
     end
 
     private
+
+    def check_signature(password)
+      signature = response['signature']
+      unless signature
+        raise InvalidSignature, 'Response signature not found'
+      end
+
+      expected_signature = Signature.build(params: response, password: password)
+      unless signature == expected_signature
+        raise InvalidSignature, 'Invalid response signature'
+      end
+    end
 
     def response
       @response ||= json_body['response'] || raise(Fondy::Error, 'Invalid response')

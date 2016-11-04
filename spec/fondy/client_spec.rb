@@ -36,7 +36,7 @@ describe Fondy::Client do
         .and_return(signature)
       stub_api_request_with(:post, "/api/status/#{order_id}", params.merge(signature: signature))
         .and_return(http_response)
-      stub_response_with(http_response)
+      stub_response_with(http_response: http_response, password: password)
         .and_return(response)
     end
 
