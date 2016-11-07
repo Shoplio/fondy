@@ -31,7 +31,7 @@ module Fondy
 
     private
 
-    # rubocop:disable Style/IfUnlessModifier, Style/GuardClause
+    # rubocop:disable Style/GuardClause
     def check_signature(password)
       signature = response['signature']
       unless signature

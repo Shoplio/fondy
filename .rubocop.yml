@@ -25,3 +25,7 @@ Style/MultilineMethodCallBraceLayout:
 
 Style/MultilineMethodCallIndentation:
   EnforcedStyle: indented
+
+Style/EmptyLines:
+  Exclude:
+    - 'spec/**/*'
