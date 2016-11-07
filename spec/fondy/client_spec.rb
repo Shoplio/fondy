@@ -53,7 +53,7 @@ describe Fondy::Client do
       client.status(order_id: order_id)
     end
 
-    let(:post_url) { "/api/status/#{order_id}" }
+    let(:post_url) { '/api/status/order_id' }
     let(:post_params) do
       {
         merchant_id: merchant_id,
@@ -69,7 +69,7 @@ describe Fondy::Client do
       client.capture(order_id: order_id, amount: amount, currency: currency)
     end
 
-    let(:post_url) { "/api/capture/#{order_id}" }
+    let(:post_url) { '/api/capture/order_id' }
     let(:post_params) do
       {
         merchant_id: merchant_id,
@@ -87,7 +87,7 @@ describe Fondy::Client do
       client.reverse(order_id: order_id, amount: amount, currency: currency)
     end
 
-    let(:post_url) { "/api/reverse/#{order_id}" }
+    let(:post_url) { '/api/reverse/order_id' }
     let(:post_params) do
       {
         merchant_id: merchant_id,

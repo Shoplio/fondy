@@ -10,7 +10,9 @@ module Fondy
     end
 
     def build
-      filtered_params = params.reject { |k, _v| k.to_s == 'signature' }
+      filtered_params = params.reject do |k, v|
+        %w(signature response_signature_string).include?(k.to_s) || v.to_s.empty?
+      end
       params_str = filtered_params.sort_by(&:first).map(&:last).join('|')
       Digest::SHA1.hexdigest("#{password}|#{params_str}")
     end

@@ -9,6 +9,8 @@ describe Fondy::Signature do
       amount: '125',
       signature: 'f0ee6288b9295d3b808bcd8d720211c7201245e1',
       merchant_id: '1396424',
+      response_signature_string: '****|125|USD|1396424|test order|test123456',
+      blank_param: '',
     }
   end
 

@@ -17,7 +17,7 @@ module Fondy
       connection.public_send(method) do |request|
         request.url url
         if body
-          request.body = { request: body }.to_json
+          request.body = JSON.generate(request: body)
           request.headers['Content-Type'] = 'application/json'
         end
       end
