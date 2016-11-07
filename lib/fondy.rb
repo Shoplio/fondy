@@ -1,7 +1,7 @@
 require 'faraday'
 
 require 'fondy/version'
-require 'fondy/error'
+require 'fondy/errors'
 require 'fondy/client'
 require 'fondy/request'
 require 'fondy/response'

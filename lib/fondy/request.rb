@@ -22,7 +22,7 @@ module Fondy
         end
       end
     rescue Faraday::Error => e
-      raise Fondy::Error, e.message
+      raise Fondy::RequestError, e.message
     end
 
     private
