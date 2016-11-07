@@ -7,12 +7,33 @@ module Fondy
       @password = password
     end
 
-    def order_status(order_id)
+    def status(order_id:)
       params = {
         merchant_id: merchant_id,
         order_id: order_id,
       }
       send_request(:post, "/api/status/#{order_id}", params)
+    end
+
+    def capture(order_id:, amount:, currency:)
+      params = {
+        merchant_id: merchant_id,
+        order_id: order_id,
+        amount: amount,
+        currency: currency,
+      }
+      send_request(:post, "/api/capture/#{order_id}", params)
+    end
+
+    def reverse(order_id:, amount:, currency:, comment: nil)
+      params = {
+        merchant_id: merchant_id,
+        order_id: order_id,
+        amount: amount,
+        currency: currency,
+      }
+      params[:comment] = comment if comment
+      send_request(:post, "/api/reverse/#{order_id}", params)
     end
 
     private
