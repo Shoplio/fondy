@@ -26,6 +26,16 @@ describe Fondy::Response do
   end
 
   context 'with success response' do
+    it '#to_h returns all data' do
+      response_hash = {
+        response_status: 'success',
+        actual_amount: 100,
+        order_status: 'approved',
+        signature: 'valid_signature',
+      }
+      expect(response.to_h).to eq(response_hash)
+    end
+
     it '#success? returns true' do
       expect(response.success?).to eq(true)
     end
@@ -66,6 +76,15 @@ describe Fondy::Response do
           },
         }.to_json,
       )
+    end
+
+    it '#to_h returns all data' do
+      response_hash = {
+        response_status: 'failure',
+        error_message: 'Order not found',
+        error_code: 1018,
+      }
+      expect(response.to_h).to eq(response_hash)
     end
 
     it '#success? returns false' do

@@ -38,6 +38,13 @@ response.success?
 # => true
 response.order_status
 # => "approved"
+response.to_h
+# => {
+#   response_status: "success",
+#   order_status: "approved",
+#   actual_amount: 100,
+#   ...
+# }
 
 response.error?
 # => true
@@ -45,6 +52,12 @@ response.error_code
 # => 1018
 response.error_message
 # => "Order not found"
+response.to_h
+# => {
+#   response_status: "failure",
+#   error_message: "Order not found",
+#   error_code: 1018
+# }
 ```
 
 Capture payment:

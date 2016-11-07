@@ -5,8 +5,12 @@ module Fondy
       check_signature(password) if success?
     end
 
+    def to_h
+      response
+    end
+
     def success?
-      response['response_status'] == 'success'
+      response[:response_status] == 'success'
     end
 
     def error?
@@ -14,26 +18,26 @@ module Fondy
     end
 
     def error_code
-      response['error_code']
+      response[:error_code]
     end
 
     def error_message
-      response['error_message']
+      response[:error_message]
     end
 
     def method_missing(method, *_args)
-      response[method.to_s] || super
+      response[method] || super
     end
 
     def respond_to_missing?(method, *_args)
-      response.key?(method.to_s)
+      response.key?(method)
     end
 
     private
 
     # rubocop:disable Style/GuardClause
     def check_signature(password)
-      signature = response['signature']
+      signature = response[:signature]
       unless signature
         raise Fondy::InvalidSignatureError, 'Response signature not found'
       end
@@ -45,13 +49,13 @@ module Fondy
     end
 
     def response
-      @response ||= json_body['response'] || raise(Fondy::Error, 'Invalid response')
+      @response ||= json_body[:response] || raise(Fondy::Error, 'Invalid response')
     end
 
     def json_body
       @json_body ||=
         begin
-          JSON.parse(@http_response.body)
+          JSON.parse(@http_response.body, symbolize_names: true)
         rescue
           raise Fondy::InvalidResponseError, 'Invalid response'
         end
