@@ -12,7 +12,7 @@ module Fondy
         merchant_id: merchant_id,
         order_id: order_id,
       }
-      send_request(:post, "/api/status/order_id", params)
+      send_request(:post, '/api/status/order_id', params)
     end
 
     def capture(order_id:, amount:, currency:)
@@ -22,7 +22,7 @@ module Fondy
         amount: amount,
         currency: currency,
       }
-      send_request(:post, "/api/capture/order_id", params)
+      send_request(:post, '/api/capture/order_id', params)
     end
 
     def reverse(order_id:, amount:, currency:, comment: nil)
@@ -33,7 +33,7 @@ module Fondy
         currency: currency,
       }
       params[:comment] = comment if comment
-      send_request(:post, "/api/reverse/order_id", params)
+      send_request(:post, '/api/reverse/order_id', params)
     end
 
     private
