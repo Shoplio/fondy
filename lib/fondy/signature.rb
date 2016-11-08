@@ -4,6 +4,10 @@ module Fondy
       new(*args).build
     end
 
+    def self.verify(*args)
+      new(*args).verify
+    end
+
     def initialize(params:, password:)
       @params = params
       @password = password
@@ -15,6 +19,19 @@ module Fondy
       end
       params_str = filtered_params.sort_by(&:first).map(&:last).join('|')
       Digest::SHA1.hexdigest("#{password}|#{params_str}")
+    end
+
+    def verify
+      unless params[:signature]
+        raise Fondy::InvalidSignatureError, 'Response signature not found'
+      end
+
+      signature = build
+      unless params[:signature] == signature
+        raise Fondy::InvalidSignatureError, 'Invalid response signature'
+      end
+
+      true
     end
 
     private

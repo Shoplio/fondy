@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Fondy::Signature do
+  let(:password) { 'test' }
   let(:params) do
     {
       order_id: 'test123456',
@@ -14,10 +15,46 @@ describe Fondy::Signature do
     }
   end
 
-  it 'build sinature from params and password' do
-    signature = Fondy::Signature.build(params: params, password: 'test')
-    expected_signature = Digest::SHA1.hexdigest('test|125|USD|1396424|test order|test123456')
+  let(:expected_signature) do
+    Digest::SHA1.hexdigest("#{password}|125|USD|1396424|test order|test123456")
+  end
 
-    expect(signature).to eq(expected_signature)
+  describe '#build' do
+    it 'build sinature from params and password' do
+      signature = Fondy::Signature.build(params: params, password: password)
+      expect(signature).to eq(expected_signature)
+    end
+  end
+
+  describe '#verify' do
+    subject do
+      Fondy::Signature.verify(params: params, password: password)
+    end
+
+    context 'without signature' do
+      before do
+        params.delete(:signature)
+      end
+
+      it 'raise error' do
+        expect { subject }.to raise_error(Fondy::Error, 'Response signature not found')
+      end
+    end
+
+    context 'with invalid signature' do
+      it 'raise error' do
+        expect { subject }.to raise_error(Fondy::Error, 'Invalid response signature')
+      end
+    end
+
+    context 'with valid signature' do
+      before do
+        params[:signature] = expected_signature
+      end
+
+      it 'returns true' do
+        expect(subject).to eq(true)
+      end
+    end
   end
 end

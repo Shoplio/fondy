@@ -7,6 +7,18 @@ module Fondy
       @password = password
     end
 
+    def checkout(order_id:, order_desc:, amount:, currency:, **other_params)
+      params = {
+        merchant_id: merchant_id,
+        order_id: order_id,
+        order_desc: order_desc,
+        amount: amount,
+        currency: currency,
+        **other_params,
+      }
+      send_request(:post, '/api/checkout/url', params, verify_signature: false)
+    end
+
     def status(order_id:)
       params = {
         merchant_id: merchant_id,
@@ -38,10 +50,16 @@ module Fondy
 
     private
 
-    def send_request(method, url, params)
+    def send_request(method, url, params, verify_signature: true)
       params[:signature] = Signature.build(params: params, password: password)
       http_response = Request.call(method, url, params)
-      Response.new(http_response: http_response, password: password)
+      response = Response.new(http_response)
+
+      if verify_signature && response.success?
+        Signature.verify(params: response.to_h, password: password)
+      end
+
+      response
     end
   end
 end

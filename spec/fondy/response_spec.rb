@@ -22,7 +22,7 @@ describe Fondy::Response do
   end
 
   let(:response) do
-    described_class.new(http_response: http_response, password: 'pass')
+    described_class.new(http_response)
   end
 
   context 'with success response' do
@@ -101,41 +101,6 @@ describe Fondy::Response do
 
     it '#error_message returns error message' do
       expect(response.error_message).to eq('Order not found')
-    end
-  end
-
-  context 'without signature' do
-    let(:http_response) do
-      double(
-        status: 200,
-        body: {
-          response: {
-            response_status: 'success',
-          },
-        }.to_json,
-      )
-    end
-
-    it 'raise error' do
-      expect { response }.to raise_error(Fondy::Error, 'Response signature not found')
-    end
-  end
-
-  context 'with invalid signature' do
-    let(:http_response) do
-      double(
-        status: 200,
-        body: {
-          response: {
-            response_status: 'success',
-            signature: 'invalid_signature',
-          },
-        }.to_json,
-      )
-    end
-
-    it 'raise error' do
-      expect { response }.to raise_error(Fondy::Error, 'Invalid response signature')
     end
   end
 end

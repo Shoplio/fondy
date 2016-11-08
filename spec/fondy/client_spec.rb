@@ -5,12 +5,13 @@ describe Fondy::Client do
   let(:password) { 'qwerty' }
 
   let(:order_id) { 2 }
+  let(:order_desc) { 'Test order' }
   let(:amount) { 100 }
   let(:currency) { 'USD' }
 
   let(:signature) { double }
   let(:http_response) { double }
-  let(:response) { double }
+  let(:response) { double(success?: true, to_h: {}) }
 
   let(:client) { described_class.new(merchant_id: merchant_id, password: password) }
 
@@ -29,13 +30,23 @@ describe Fondy::Client do
       expect(Fondy::Response).to receive(:new).with(*args)
     end
 
+    def stub_verify_signature_with(*args)
+      expect(Fondy::Signature).to receive(:verify)
+        .with(*args)
+    end
+
     before do
       stub_signature_with(params: post_params, password: password)
         .and_return(signature)
       stub_api_request_with(:post, post_url, post_params.merge(signature: signature))
         .and_return(http_response)
-      stub_response_with(http_response: http_response, password: password)
+      stub_response_with(http_response)
         .and_return(response)
+
+      if verify_signature
+        stub_verify_signature_with(params: response.to_h, password: password)
+          .and_return(true)
+      end
     end
 
     it 'sends request to API' do
@@ -47,6 +58,34 @@ describe Fondy::Client do
     end
   end
 
+
+  describe '#checkout' do
+    subject do
+      client.checkout(
+        order_id: order_id,
+        order_desc: order_desc,
+        amount: amount,
+        currency: currency,
+        preauth: 'Y',
+      )
+    end
+
+    let(:post_url) { '/api/checkout/url' }
+    let(:post_params) do
+      {
+        merchant_id: merchant_id,
+        order_id: order_id,
+        order_desc: order_desc,
+        amount: amount,
+        currency: currency,
+        preauth: 'Y',
+      }
+    end
+
+    let(:verify_signature) { false }
+
+    it_behaves_like 'api method'
+  end
 
   describe '#status' do
     subject do
@@ -60,6 +99,8 @@ describe Fondy::Client do
         order_id: order_id,
       }
     end
+
+    let(:verify_signature) { true }
 
     it_behaves_like 'api method'
   end
@@ -79,6 +120,8 @@ describe Fondy::Client do
       }
     end
 
+    let(:verify_signature) { true }
+
     it_behaves_like 'api method'
   end
 
@@ -96,6 +139,8 @@ describe Fondy::Client do
         currency: currency,
       }
     end
+
+    let(:verify_signature) { true }
 
     it_behaves_like 'api method'
   end

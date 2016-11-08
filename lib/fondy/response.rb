@@ -1,8 +1,7 @@
 module Fondy
   class Response
-    def initialize(http_response:, password:)
+    def initialize(http_response)
       @http_response = http_response
-      check_signature(password) if success?
     end
 
     def to_h
@@ -34,19 +33,6 @@ module Fondy
     end
 
     private
-
-    # rubocop:disable Style/GuardClause
-    def check_signature(password)
-      signature = response[:signature]
-      unless signature
-        raise Fondy::InvalidSignatureError, 'Response signature not found'
-      end
-
-      expected_signature = Signature.build(params: response, password: password)
-      unless signature == expected_signature
-        raise Fondy::InvalidSignatureError, 'Invalid response signature'
-      end
-    end
 
     def response
       @response ||= json_body[:response] || raise(Fondy::Error, 'Invalid response')
