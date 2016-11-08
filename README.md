@@ -60,6 +60,14 @@ response.to_h
 # }
 ```
 
+Create payment:
+
+```ruby
+response = client.checkout(order_id: 2, order_desc: '...', amount: 100, currency: 'USD')
+response.checkout_url
+# => "https://api.fondy.eu/api/checkout?token=..."
+```
+
 Capture payment:
 
 ```ruby
