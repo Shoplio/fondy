@@ -6,6 +6,7 @@ require 'fondy/errors'
 require 'fondy/client'
 require 'fondy/request'
 require 'fondy/response'
+require 'fondy/transaction_list_response'
 require 'fondy/signature'
 
 module Fondy
