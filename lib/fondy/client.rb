@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Fondy
   class Client
     attr_reader :merchant_id, :password
@@ -48,12 +49,25 @@ module Fondy
       send_request(:post, '/api/reverse/order_id', params)
     end
 
+    def transaction_list(order_id:)
+      send_request(
+        :post,
+        '/api/transaction_list',
+        {
+          merchant_id: merchant_id,
+          order_id: order_id,
+        },
+        verify_signature: false,
+        response_class: TransactionListResponse,
+      )
+    end
+
     private
 
-    def send_request(method, url, params, verify_signature: true)
+    def send_request(method, url, params, verify_signature: true, response_class: Response)
       params[:signature] = Signature.build(params: params, password: password)
       http_response = Request.call(method, url, params)
-      response = Response.new(http_response)
+      response = response_class.new(http_response)
 
       if verify_signature && response.success?
         Signature.verify(params: response.to_h, password: password)

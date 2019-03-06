@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 describe Fondy::Client do
@@ -12,6 +13,7 @@ describe Fondy::Client do
   let(:signature) { double }
   let(:http_response) { double }
   let(:response) { double(success?: true, to_h: {}) }
+  let(:response_class) { Fondy::Response }
 
   let(:client) { described_class.new(merchant_id: merchant_id, password: password) }
 
@@ -26,8 +28,8 @@ describe Fondy::Client do
         .with(*args)
     end
 
-    def stub_response_with(*args)
-      expect(Fondy::Response).to receive(:new).with(*args)
+    def stub_response_with(response_class, *args)
+      expect(response_class).to receive(:new).with(*args)
     end
 
     def stub_verify_signature_with(*args)
@@ -40,7 +42,7 @@ describe Fondy::Client do
         .and_return(signature)
       stub_api_request_with(:post, post_url, post_params.merge(signature: signature))
         .and_return(http_response)
-      stub_response_with(http_response)
+      stub_response_with(response_class, http_response)
         .and_return(response)
 
       if verify_signature
@@ -141,6 +143,26 @@ describe Fondy::Client do
     end
 
     let(:verify_signature) { true }
+
+    it_behaves_like 'api method'
+  end
+
+  describe '#transaction_list' do
+    subject do
+      client.transaction_list(order_id: order_id)
+    end
+
+    let(:post_url) { '/api/transaction_list' }
+    let(:post_params) do
+      {
+        merchant_id: merchant_id,
+        order_id: order_id,
+      }
+    end
+
+    let(:verify_signature) { false }
+
+    let(:response_class) { Fondy::TransactionListResponse }
 
     it_behaves_like 'api method'
   end
