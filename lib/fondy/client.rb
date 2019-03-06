@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Fondy
   class Client
     attr_reader :merchant_id, :password
@@ -49,11 +50,13 @@ module Fondy
     end
 
     def transaction_list(order_id:)
-      params = {
-        merchant_id: merchant_id,
-        order_id: order_id,
-      }
-      send_request(:post, '/api/transaction_list', params,
+      send_request(
+        :post,
+        '/api/transaction_list',
+        {
+          merchant_id: merchant_id,
+          order_id: order_id,
+        },
         verify_signature: false,
         response_class: TransactionListResponse,
       )

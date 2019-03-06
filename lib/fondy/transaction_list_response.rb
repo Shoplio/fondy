@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Fondy
   class TransactionListResponse < BaseResponse
     def transactions

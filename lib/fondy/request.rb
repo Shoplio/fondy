@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 module Fondy
   class Request
-    API_HOST = 'https://api.fondy.eu'.freeze
+    API_HOST = 'https://api.fondy.eu'
 
     def self.call(*args)
       new(*args).call
