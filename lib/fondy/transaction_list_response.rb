@@ -1,11 +1,7 @@
 module Fondy
-  class TransactionListResponse < Response
+  class TransactionListResponse < BaseResponse
     def transactions
-      if response.is_a?(Array)
-        response
-      else
-        []
-      end
+      success? ? response : []
     end
 
     def success?
@@ -18,14 +14,6 @@ module Fondy
 
     def error_message
       response[:error_message] if response.is_a?(Hash)
-    end
-
-    def method_missing(method, *_args)
-      super
-    end
-
-    def respond_to_missing?(method, *_args)
-      false
     end
   end
 end
