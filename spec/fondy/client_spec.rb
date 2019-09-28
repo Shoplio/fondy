@@ -89,6 +89,32 @@ describe Fondy::Client do
     it_behaves_like 'api method'
   end
 
+  describe '#token' do
+    subject do
+      client.token(
+        order_id: order_id,
+        order_desc: order_desc,
+        amount: amount,
+        currency: currency,
+      )
+    end
+
+    let(:post_url) { '/api/checkout/token' }
+    let(:post_params) do
+      {
+        merchant_id: merchant_id,
+        order_id: order_id,
+        order_desc: order_desc,
+        amount: amount,
+        currency: currency,
+      }
+    end
+
+    let(:verify_signature) { false }
+
+    it_behaves_like 'api method'
+  end
+
   describe '#status' do
     subject do
       client.status(order_id: order_id)

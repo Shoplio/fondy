@@ -20,6 +20,18 @@ module Fondy
       send_request(:post, '/api/checkout/url', params, verify_signature: false)
     end
 
+    def token(order_id:, order_desc:, amount:, currency:, **other_params)
+      params = {
+        merchant_id: merchant_id,
+        order_id: order_id,
+        order_desc: order_desc,
+        amount: amount,
+        currency: currency,
+        **other_params,
+      }
+      send_request(:post, '/api/checkout/token', params, verify_signature: false)
+    end
+
     def status(order_id:)
       params = {
         merchant_id: merchant_id,
