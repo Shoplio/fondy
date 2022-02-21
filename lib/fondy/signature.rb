@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 module Fondy
   class Signature
-    def self.build(*args)
-      new(*args).build
+    def self.build(**args)
+      new(**args).build
     end
 
-    def self.verify(*args)
-      new(*args).verify
+    def self.verify(**args)
+      new(**args).verify
     end
 
     def initialize(params:, password:)
